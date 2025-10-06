@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do App</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #16213e, #0f3460);
+      color: #fff;
+    }
+
+    .todo-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      width: 400px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #e94560;
+      margin-bottom: 20px;
+    }
+
+    .input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-area input {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .input-area button {
+      padding: 10px;
+      background: #21e6c1;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .input-area button:hover {
+      background: #1ab89b;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.15);
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    li.completed span {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .task-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .task-date {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    button.edit {
+      background: #ff9f43;
+    }
+    button.edit:hover {
+      background: #e67e22;
+    }
+
+    button.delete {
+      background: #e94560;
+      color: #fff;
+    }
+    button.delete:hover {
+      background: #d63048;
+    }
+
+    button.complete {
+      background: #2ecc71;
+      color: #fff;
+    }
+    button.complete:hover {
+      background: #27ae60;
+    }
+
+    button {
+      padding: 5px 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-container">
+    <h1>To-Do App</h1>
+    <div class="input-area">
+      <input type="text" id="taskInput" placeholder="Enter a new task">
+      <input type="datetime-local" id="taskDateTime">
+      <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskDateTime = document.getElementById("taskDateTime");
+    const taskList = document.getElementById("taskList");
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      const taskTime = taskDateTime.value;
+
+      if (taskText === "") return;
+
+      const li = document.createElement("li");
+
+      const taskInfo = document.createElement("div");
+      taskInfo.classList.add("task-info");
+
+      const taskSpan = document.createElement("span");
+      taskSpan.textContent = taskText;
+
+      const dateSpan = document.createElement("span");
+      dateSpan.textContent = taskTime ? `Due: ${taskTime}` : "";
+      dateSpan.classList.add("task-date");
+
+      taskInfo.appendChild(taskSpan);
+      taskInfo.appendChild(dateSpan);
+
+      const buttonsDiv = document.createElement("div");
+      buttonsDiv.classList.add("buttons");
+
+      // Complete button
+      const completeBtn = document.createElement("button");
+      completeBtn.textContent = "✔";
+      completeBtn.classList.add("complete");
+      completeBtn.onclick = () => {
+        li.classList.toggle("completed");
+      };
+
+      // Edit button
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✎";
+      editBtn.classList.add("edit");
+      editBtn.onclick = () => {
+        const newTask = prompt("Edit Task:", taskSpan.textContent);
+        if (newTask !== null && newTask.trim() !== "") {
+          taskSpan.textContent = newTask;
+        }
+      };
+
+      // Delete button
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑";
+      deleteBtn.classList.add("delete");
+      deleteBtn.onclick = () => {
+        li.remove();
+      };
+
+      buttonsDiv.appendChild(completeBtn);
+      buttonsDiv.appendChild(editBtn);
+      buttonsDiv.appendChild(deleteBtn);
+
+      li.appendChild(taskInfo);
+      li.appendChild(buttonsDiv);
+
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+      taskDateTime.value = "";
+    }
+  </script>
+</body>
+</html>
